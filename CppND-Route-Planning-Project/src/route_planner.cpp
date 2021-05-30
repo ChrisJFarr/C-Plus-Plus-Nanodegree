@@ -72,9 +72,8 @@ bool wayToSort(RouteModel::Node *node_i, RouteModel::Node *node_j){
 }
 
 
-RouteModel::Node *RoutePlanner::NextNode() {
-
-    // My Code Start (IN PROGRESS)
+RouteModel::Node *RoutePlanner::NextNode() 
+{
 
     // Sort open_list
     std::sort(open_list.begin(), open_list.end(), wayToSort);  // Create method for sorting by f
@@ -104,11 +103,32 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
     // TODO: Implement your solution here.
 
+    // Store new node here
+    RouteModel::Node *new_node;
+
+    // Add current_node to path prior to looping through parents
+    // Loop until new_node == start_node  Do they have equivalent method?
+    while(true)
+    {
+        // Add current node to the path
+        path_found.push_back(*current_node);
+        // Test for starting node, if found then break
+        if((current_node->x == start_node->x) && (current_node->y == start_node->y)){break;}
+        // set new_node = parent
+        new_node = current_node->parent;
+        // compute and add distance between 
+        distance += new_node->distance(*current_node);
+        // Update current node
+        current_node = new_node;
+    }
+
+    // Reverse path order
+    std::reverse(path_found.begin(), path_found.end());
+
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
 
 }
-
 
 // TODO 7: Write the A* Search algorithm here.
 // Tips:
@@ -121,5 +141,21 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
     // TODO: Implement your solution here.
+    // Set the current_node to the start_node
+    current_node = start_node;
+    // Add neighbors to initialize frontier
+    AddNeighbors(current_node);
+    // Loop until goal is found
+    while(true)
+    {
+        // Get next node: NextNode()
+        current_node = NextNode();
+        // Test for goal
+        if((current_node->x == end_node->x) && (current_node->y == end_node->y)) break;
+        // Add neighbors
+        AddNeighbors(current_node);
+    }
 
+    // Store path in m_Model.path return path from ConstructFinalPath and pass it the final node (goal node)
+    m_Model.path = ConstructFinalPath(current_node);
 }
