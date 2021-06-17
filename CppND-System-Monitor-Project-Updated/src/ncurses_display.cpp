@@ -1,11 +1,13 @@
+#include "ncurses_display.h"
+
 #include <curses.h>
+
 #include <chrono>
 #include <string>
 #include <thread>
 #include <vector>
 
 #include "format.h"
-#include "ncurses_display.h"
 #include "system.h"
 
 using std::string;
@@ -14,7 +16,7 @@ using std::to_string;
 // 50 bars uniformly displayed from 0 - 100 %
 // 2% is one bar(|)
 std::string NCursesDisplay::ProgressBar(float percent) {
-  std::string result{"0%"};
+  std::string result{""};
   int size{50};
   float bars{percent * size};
 
@@ -25,7 +27,7 @@ std::string NCursesDisplay::ProgressBar(float percent) {
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
     display = " " + to_string(percent * 100).substr(0, 3);
-  return result + " " + display + "/100%";
+  return result + " " + display + "/100%%";
 }
 
 void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
