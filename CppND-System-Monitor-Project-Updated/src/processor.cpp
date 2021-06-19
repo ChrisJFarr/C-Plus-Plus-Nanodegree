@@ -9,7 +9,8 @@ using std::string;
 
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() {
-  string dump;  // Don't need this, it will return cpu
+
+  string dump;
   int user, nice, system_int, idle, iowait, irq, softirq, steal, guest,
       guest_nice;
   string line;
