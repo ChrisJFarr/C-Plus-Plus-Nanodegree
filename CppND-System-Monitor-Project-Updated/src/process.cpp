@@ -238,7 +238,7 @@ long int Process::UpTime() {
 
   // Declare support variables
   string line, token;
-  float up_time;
+  float start_time, up_time;
 
   // Stream file contents
   std::ifstream stream(LinuxParser::kProcDirectory + 
@@ -265,15 +265,18 @@ long int Process::UpTime() {
 
   // Convert to float
   try {
-    up_time = std::stof(token);
+    start_time = std::stof(token);
   } 
   catch(...) {
-    up_time = 0.00001;
+    start_time = 0.00001;
   }
   
   // Divide by clock ticks
   float hertz = sysconf(_SC_CLK_TCK);
-  up_time /= hertz;
+  start_time /= hertz;
+
+  // Subtract start time from current time
+  up_time = LinuxParser::UpTime() - start_time;
 
   // Update the cached value
   cached_up_time = long(up_time);
