@@ -44,6 +44,94 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+// rule-of-five
+// destructor already implemented
+// copy assignment operator
+ChatBot& ChatBot::operator=(const ChatBot &source) // 3 : copy assignment operator
+{
+    // std::cout << "assigning ChatBot content of instance " << &source << " to instance " << this << std::endl;
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+    if (this == &source)
+        return *this;
+
+    // Delete existing image
+    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    {
+        delete _image;
+    }
+    // Allocate memory for image to copy to, wxBitmap
+    _image = new wxBitmap(source._image->ConvertToImage());
+    // _image = new wxBitmap(source.GetWidth(), source.GetHeight(), source.GetDepth());
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    return *this;
+}
+
+// copy constructor
+ChatBot::ChatBot(const ChatBot &source) // 2 : copy constructor
+{
+    /*
+    takes an lvalue reference to the source instance, allocates a block of 
+    memory of the same size as in the source and then copies the data into its 
+    members (as a deep copy)
+    */
+   std::cout << "ChatBot Copy Constructor" << std::endl;
+   // std::cout << "COPYING content of instance " << &source << " to instance " << this << std::endl;
+    // Delete existing image
+    delete _image;
+    // Allocate memory for image to copy to, wxBitmap
+    _image = new wxBitmap(source._image->ConvertToImage());
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+}
+// move constructor
+ChatBot::ChatBot(ChatBot &&source) // 4 : move constructor
+{
+    /*
+    the move constructor builds an instance of a class using a source instance. 
+    The key difference between the two is that with the move constructor, the source 
+    instance will no longer be usable afterwards.
+    */
+    // std::cout << "MOVING (c’tor) instance " << &source << " to instance " << this << std::endl;
+    std::cout << "ChatBot Move Constructor" << std::endl;
+    // Copy handlers
+    _image = source._image;
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    // Null out source handlers
+    source._image = nullptr;
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+}
+// move assignment operator
+ChatBot& ChatBot::operator=(ChatBot &&source) // 5 : move assignment operator
+{
+    /*
+    As with the move constructor, the data handle is copied from source to 
+    target which is coming in as an rvalue reference again. Afterwards, the data 
+    members of source are invalidated.
+    */
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
+    // std::cout << "MOVING (assign) instance " << &source << " to instance " << this << std::endl;
+    if (this == &source)
+        return *this;
+
+    // Delete existing image
+    delete _image;
+
+    // Copy handlers
+    _image = source._image;
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    // Null out source handlers
+    source._image = nullptr;
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+
+    return *this;
+}
+
 
 ////
 //// EOF STUDENT CODE

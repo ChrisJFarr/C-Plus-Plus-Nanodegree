@@ -35,12 +35,16 @@ public:
     // sense to you. In each of the methods (e.g. the copy constructor), print a string of the type „ChatBot Copy Constructor“ 
     // to the console so that you can see which method is called in later examples. 
     // rule-of-five
-    // destructor
+    // destructor already implemented
     // assignment operator
+    ChatBot& operator=(const ChatBot &source);
     // copy constructor
+    ChatBot(const ChatBot &source);
     // move constructor
+    ChatBot(ChatBot &&source);
     // move assignment operator
-
+    ChatBot& operator=(ChatBot &&source);
+    
     ////
     //// EOF STUDENT CODE
 
