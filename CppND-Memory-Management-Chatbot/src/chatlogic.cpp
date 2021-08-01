@@ -229,15 +229,20 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     }
 
     // Create ChatBot instance on the stack (heap seems better, the pointer can be on the stack)
-    std::unique_ptr<ChatBot> chatBot = std::make_unique<ChatBot>("../images/chatbot.png");
+    // std::unique_ptr<ChatBot> chatBot = std::make_unique<ChatBot>("../images/chatbot.png");
+    ChatBot chatBot("../images/chatbot.png");
     
-    // Set handle
-    _chatBot = chatBot.get();
-    _chatBot->SetChatLogicHandle(this);
+    // // Set handle
+    // _chatBot = chatBot.get();
+    // _chatBot->SetChatLogicHandle(this);
 
     // add chatbot to graph root node
     // use move semantics to pass the ChatBot instance into the root node
-    chatBot->SetRootNode(rootNode);
+    // chatBot->SetRootNode(rootNode);
+    chatBot.SetChatLogicHandle(this);
+    // std::cout << "LogicHandle Address:" << this << std::endl;
+    // std::cout << "LogicHandle Address:" << chatBot.GetChatLogicHandle() << std::endl;
+    chatBot.SetRootNode(rootNode);
     rootNode->MoveChatbotHere(std::move(chatBot));
     
     ////

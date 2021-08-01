@@ -174,15 +174,21 @@ void ChatBot::SetCurrentNode(GraphNode *node)
 {
     // update pointer to current node
     _currentNode = node;
-
+    // Update logic handle to new chatbot location
+    _chatLogic->SetChatbotHandle(this);
+    // std::cout << "made it here aa" << std::endl;
     // select a random node answer (if several answers should exist)
     std::vector<std::string> answers = _currentNode->GetAnswers();
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
+    // std::cout << "made it here ab" << std::endl;
 
     // send selected node answer to user
+    // std::cout << "LogicHandle Address:" << _chatLogic << std::endl;
+    // std::cout << "Answer:" << answer << std::endl;
     _chatLogic->SendMessageToUser(answer);
+    // std::cout << "made it here ac" << std::endl;
 }
 
 int ChatBot::ComputeLevenshteinDistance(std::string s1, std::string s2)
